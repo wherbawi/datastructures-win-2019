@@ -13,6 +13,7 @@ public class ArrayBasedList<T> implements BUList<T> {
 		//TODO:check if capacity is negative and throw an exception in that case
 		elements = (T[]) new Object[capacity];
 	}
+	
 
 	public int size() {
 		return size;
@@ -74,5 +75,23 @@ public class ArrayBasedList<T> implements BUList<T> {
 		for (int i = size; i > startShiftingIndex; i--) {
 			elements[i] = elements[i - 1];
 		}
+	}
+
+	@Override
+	public void addAll(BUList<T> other) {
+		// TODO add all elements of other to this list in order
+		
+	}
+
+	@Override
+	public void addAll(int index, BUList<T> other) {
+		// TODO add all elements of other to this list in order starting from index. Shift all elements after index
+		
+	}
+
+	@Override
+	public void reverse() {
+		// TODO reverse the elements of the list
+		
 	}
 }

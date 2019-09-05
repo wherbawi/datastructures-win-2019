@@ -136,4 +136,22 @@ public class LinkedList<T> implements BUList<T> {
 			this.next = next;
 		}
 	}
+
+	@Override
+	public void addAll(BUList<T> other) {
+		// TODO add all elements of other to this list in order
+		
+	}
+
+	@Override
+	public void addAll(int index, BUList<T> other) {
+		// TODO add all elements of other to this list in order starting from index. Shift all elements after index
+		
+	}
+
+	@Override
+	public void reverse() {
+		// TODO reverse the elements of the list
+		
+	}
 }

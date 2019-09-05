@@ -2,6 +2,8 @@ package edu.bu.datastructures.list;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -24,6 +26,8 @@ public class ArrayBasedListTest {
 	@Test
 	public void testAddingToListAtPosition() {
 		ArrayBasedList<Integer> list = new ArrayBasedList<Integer>();
+		List<Integer> l = new ArrayList<>();
+
 		list.add(3);
 		list.add(0, 5);
 
