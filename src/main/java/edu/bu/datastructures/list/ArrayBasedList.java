@@ -1,5 +1,7 @@
 package edu.bu.datastructures.list;
 
+import java.util.Stack;
+
 public class ArrayBasedList<T> implements BUList<T> {
 	private static final int DEFAULT_CAPACITY = 20;
 	private T[] elements;
@@ -10,28 +12,28 @@ public class ArrayBasedList<T> implements BUList<T> {
 	}
 
 	public ArrayBasedList(int capacity) {
-		//TODO:check if capacity is negative and throw an exception in that case
 		elements = (T[]) new Object[capacity];
 	}
-	
 
 	public int size() {
 		return size;
 	}
 
 	public T get(int i) {
-		// TODO:do bounds check (negative i? empty elements? i>size?)->throw exception.
+		if (violateBound(i))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", i, size));
 		return elements[i];
 	}
 
 	public void set(int i, T x) {
-		// TODO: check if i>= size? i<0?-->throw exception.
+		if (violateBound(i))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", i, size));
 		elements[i] = x;
 	}
 
 	public void add(int i, T x) {
-		// TODO: check if capacity allows addition and resize the array if needed. Check
-		// if i>=size-> throw exception
+		if (violateBound(i))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", i, size));
 		if (isFullArray())
 			resize();
 		shiftForwards(i);
@@ -40,15 +42,15 @@ public class ArrayBasedList<T> implements BUList<T> {
 	}
 
 	public T remove(int i) {
-		// TODO: do bounds check (i>size? data is empty?--? throw exception)
+		if (violateBound(i))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", i, size));
 		T x = elements[i];
-		//TODO: do a shift back for the elements of the array
+		shiftBack(i);
 		size--;
 		return x;
 	}
 
 	public void add(T x) {
-		// TODO: check if capacity allows addition and resize the array if needed
 		if (isFullArray())
 			resize();
 		elements[size] = x;
@@ -59,6 +61,10 @@ public class ArrayBasedList<T> implements BUList<T> {
 		T[] tmp = (T[]) new Object[elements.length * 2];
 		copy(elements, tmp);
 		elements = tmp;
+	}
+
+	private boolean violateBound(int i) {
+		return i < 0 || i >= size;
 	}
 
 	private void copy(T[] source, T[] destination) {
@@ -77,21 +83,38 @@ public class ArrayBasedList<T> implements BUList<T> {
 		}
 	}
 
+	private void shiftBack(int startShiftingIndex) {
+		for (int i = startShiftingIndex; i < size - 1; i++) {
+			elements[i] = elements[i + 1];
+		}
+	}
+
 	@Override
 	public void addAll(BUList<T> other) {
-		// TODO add all elements of other to this list in order
-		
+		for (int i = 0; i < other.size(); i++) {
+			add(other.get(i));
+		}
 	}
 
 	@Override
 	public void addAll(int index, BUList<T> other) {
-		// TODO add all elements of other to this list in order starting from index. Shift all elements after index
-		
+		if (violateBound(index))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", index, size));
+		// easiest approach, still you can shift by other.size() starting from index
+		// before you start adding to avoid multiple shifts.
+		for (int i = 0; i < other.size(); i++) {
+			add(index + i, other.get(i));
+		}
 	}
 
 	@Override
 	public void reverse() {
-		// TODO reverse the elements of the list
-		
+		Stack<T> stack = new Stack<>();
+		for (int i = 0; i < size; i++) {
+			stack.add(remove(0));
+		}
+		while (!stack.empty()) {
+			add(stack.pop());
+		}
 	}
 }

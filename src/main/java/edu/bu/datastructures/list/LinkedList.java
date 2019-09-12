@@ -1,5 +1,7 @@
 package edu.bu.datastructures.list;
 
+import java.util.Stack;
+
 public class LinkedList<T> implements BUList<T> {
 	private Node<T> head;
 	private Node<T> tail;
@@ -7,26 +9,32 @@ public class LinkedList<T> implements BUList<T> {
 
 	public LinkedList() {
 	}
-	
+
 	public int size() {
 		return size;
 	}
 
 	public T get(int i) {
-		// TODO check if i<0 or i>=size--> throw exception
+		if (violateBound(i))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", i, size));
+
 		T data = getData(i);
 		return data;
 	}
 
 	public void set(int i, T x) {
-		// TODO: check if index is valid
+		if (violateBound(i))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", i, size));
+
 		Node<T> targetNode = getNodeAtIndex(i);
 		targetNode.setData(x);
 
 	}
 
 	public void add(int index, T x) {
-		// TODO check if dataIndex is valid
+		if (violateBound(index))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", index, size));
+
 		Node<T> newNode = new Node<T>();
 		newNode.setData(x);
 
@@ -57,7 +65,9 @@ public class LinkedList<T> implements BUList<T> {
 	}
 
 	public T remove(int i) {
-		// TODO: check if i is valid
+		if (violateBound(i))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", i, size));
+
 		Node<T> toRemoveNode;
 		if (i == 0) { // special case when deleting the first node
 			toRemoveNode = head;
@@ -139,19 +149,33 @@ public class LinkedList<T> implements BUList<T> {
 
 	@Override
 	public void addAll(BUList<T> other) {
-		// TODO add all elements of other to this list in order
-		
+		for (int i = 0; i < other.size(); i++) {
+			add(other.get(i));
+		}
 	}
 
 	@Override
 	public void addAll(int index, BUList<T> other) {
-		// TODO add all elements of other to this list in order starting from index. Shift all elements after index
-		
+		if (violateBound(index))
+			throw new IndexOutOfBoundsException(String.format("index %d, size %d", index, size));
+		// easiest approach, still you can optimize
+		for (int i = 0; i < other.size(); i++) {
+			add(index + i, other.get(i));
+		}
 	}
 
 	@Override
 	public void reverse() {
-		// TODO reverse the elements of the list
-		
+		Stack<T> stack = new Stack<>();
+		for (int i = 0; i < size; i++) {
+			stack.add(remove(0));
+		}
+		while (!stack.empty()) {
+			add(stack.pop());
+		}
+	}
+
+	private boolean violateBound(int i) {
+		return i < 0 || i >= size;
 	}
 }
