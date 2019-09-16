@@ -11,8 +11,9 @@ public class CircularLinkedList<T> extends LinkedList<T> implements CircularList
 	@Override
 	public void add(int index, T x) {
 		super.add(index, x);
-		if(index==0)
-			getTail().setNext(getHead());;
+		if (index == 0)
+			getTail().setNext(getHead());
+		;
 	}
 
 	@Override
@@ -20,6 +21,11 @@ public class CircularLinkedList<T> extends LinkedList<T> implements CircularList
 		// size()>0?
 		setHead(getHead().getNext());
 		setTail(getTail().getNext());
+	}
+
+	public void changeDirection() {
+		// TODO: implement this method. for more information, see the point 4 in the
+		// assignment
 	}
 
 }
